@@ -1,28 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Real-Time Logs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Log Data</title>
     <script>
         function fetchLogData() {
-            fetch('/logapp/get-log-data/')
+            console.log("Fetching log data");
+            fetch('/logapp/get_log_data/')
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Received log data:", data);
                     const logContainer = document.getElementById('log-container');
-                    logContainer.innerHTML = '';  // 기존 로그 데이터를 비움
+                    logContainer.innerHTML = '';  // 기존 로그 데이터 제거
                     data.logs.forEach(log => {
                         const logEntry = document.createElement('div');
                         logEntry.textContent = log;
-                        logContainer.prepend(logEntry);  // 새로운 로그 데이터를 추가
+                        logContainer.appendChild(logEntry);
                     });
+                })
+                .catch(error => {
+                    console.error('Error fetching log data:', error);
                 });
         }
 
-        setInterval(fetchLogData, 5000);  // 5초마다 로그 데이터를 가져옴
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchLogData();  // 페이지 로드 시 즉시 로그 데이터 가져오기
+            setInterval(fetchLogData, 600000);  // 10분마다 로그 데이터를 가져옴
+        });
+
+        //프로그램이 하나로 되어있으 웹푸시
+
     </script>
 </head>
 <body>
-    <h1>Real-Time Logs</h1>
+    <h1>Real-Time Log Data</h1>
     <div id="log-container"></div>
 </body>
 </html>
-
